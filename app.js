@@ -22,7 +22,7 @@ const privacypolicy = require('./routes/privacypolicyRoute');
 const termsandcondition = require('./routes/termsandconditionRoute');
 
 // Environment variables
-const PORT = process.env.PORT || 9006;
+const PORT = process.env.PORT || 9007;
 const MONGO_URL = process.env.MONGO_URL;
 const FRONTEND = process.env.FRONTEND;
 
