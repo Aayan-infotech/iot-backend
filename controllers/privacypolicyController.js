@@ -81,7 +81,7 @@ exports.updateprivacypolicy = async (req, res) => {
     if (req.files && req.files.image2) {
       updateData.image2 = req.files.image2[0].filename;
     }
-    const updatedprivacypolicy = await privacypolicy.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    const updatedprivacypolicy = await Privacypolicy.findByIdAndUpdate(req.params.id, updateData, { new: true });
     res.json(updatedprivacypolicy);
   } catch (err) {
     res.status(500).json({ error: err.message });
