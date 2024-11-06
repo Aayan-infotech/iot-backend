@@ -1,4 +1,4 @@
-const privacypolicy = require('../models/privacypolicyModel'); // Import the correct model
+const Privacypolicy = require('../models/privacypolicyModel'); // Import the correct model
 const multer = require('multer');
 const path = require('path');
 
@@ -64,7 +64,7 @@ exports.getprivacypolicys = async (req, res) => {
 // Get a single privacy policy entry by ID
 exports.getprivacypolicyById = async (req, res) => {
   try {
-    const privacypolicy = await privacypolicy.findById(req.params.id);
+    const privacypolicy = await Privacypolicy.findById(req.params.id);
     res.json(privacypolicy);
   } catch (err) {
     res.status(500).json({ error: err.message });
