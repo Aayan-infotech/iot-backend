@@ -1,5 +1,5 @@
 // const Termsandcondition = require('../models/TermsandconditionModel');
-const Termsandcondition = require('../models/termsandconditionModel');
+const TermsandCondition = require('../models/termsandconditionModel');
 const multer = require('multer');
 const path = require('path');
 
@@ -64,7 +64,7 @@ exports.getTermsandconditions = async (req, res) => {
 // Get a single Termsandcondition post by ID
 exports.getTermsandconditionById = async (req, res) => {
   try {
-    const Termsandcondition = await Termsandcondition.findById(req.params.id);
+    const Termsandcondition = await TermsandCondition.findById(req.params.id);
     res.json(Termsandcondition);
   } catch (err) {
     res.status(500).json({ error: err.message });
