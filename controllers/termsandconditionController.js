@@ -81,7 +81,7 @@ exports.updateTermsandcondition = async (req, res) => {
     if (req.files && req.files.image2) {
       updateData.image2 = req.files.image2[0].filename;
     }
-    const updatedTermsandcondition = await Termsandcondition.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    const updatedTermsandcondition = await TermsandCondition.findByIdAndUpdate(req.params.id, updateData, { new: true });
     res.json(updatedTermsandcondition);
   } catch (err) {
     res.status(500).json({ error: err.message });
