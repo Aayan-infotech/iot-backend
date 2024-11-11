@@ -3,7 +3,7 @@ const TermsandCondition = require('../models/termsandconditionModel');
 const multer = require('multer');
 const path = require('path');
 
-// Multer setup for storing images
+// Multer setup for storing ima
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/'); // Adjust the path to your preferred uploads folder
