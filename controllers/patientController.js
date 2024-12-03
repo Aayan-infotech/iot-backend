@@ -199,48 +199,6 @@ const getPatientDetail = async (req, res, next) => {
 };
 
 
-//to Create patient
-const registerPatient = async (req, res, next) => {
-    try {
-      const { email, password, name } = req.body;
-  
-      if (!validator.isEmail(email)) {
-        return next(createError(400, false, "Invalid email format"));
-      }
-      if (password.length < 8) {
-        return next(createError(400, "Password must be at least 8 characters long"));
-      }
-      if (name.length <= 1 || name.length >= 25) {
-        return next(createError(400, "Name must be between 2 to 25 characters long"));
-      }
-  
-      const existingPatient = await Patient.findOne({ email });
-      if (existingPatient) {
-        return res.status(500).json({
-          message: "Patient already exists",
-          success: false,
-          status: 400
-        });
-      }
-  
-      const role = await Role.findOne({ role: "Patient" });
-      const hashedPassword = await bcrypt.hash(password, 8);
-      const newPatient = new Patient({
-        name,
-        email,
-        password: hashedPassword,
-        roles: [role],
-      });
-  
-      await newPatient.save();
-      return res.status(200).json("Patient Registered Successfully", true, 200);
-    } catch (error) {
-      console.error("Error in registration:", error);
-      return next(createError("Something went wrong", false, 500));
-    }
-  };
-
-
 // Get All Patients
 const getAllPatients = async (req, res, next) => {
     try {
@@ -251,49 +209,6 @@ const getAllPatients = async (req, res, next) => {
       return next(createError(500, false,  "Internal Server Error!"));
     }
   };
-
-
-//update patient
-// const updatePatient = async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const { name,  password, medicalHistory } = req.body;
-
-//     if (email && !validator.isEmail(email)) {
-//       return next(createError(400, 'Invalid email format', false));
-//     }
-//     if (password && password.length < 8) {
-//       return next(createError(400, 'Password must be at least 8 characters long', false));
-//     }
-//     if (name && (name.length <= 1 || name.length >= 25)) {
-//       return next(createError(400, 'Name must be between 2 to 25 characters long', false));
-//     }
-
-//     // Check if a patient with the same email already exists
-//     if (email) {
-//       const existingPatient = await Patient.findOne({ email, _id: { $ne: id } });
-//       if (existingPatient) {
-//         return next(createError('Email already in use by another patient', 409, false));
-//       }
-//     }
-
-//     const updatedFields = {};
-//     if (name) updatedFields.name = name;
-//     if (email) updatedFields.email = email;
-//     if (password) updatedFields.password = await bcrypt.hash(password, 10);
-//     if (medicalHistory) updatedFields.medicalHistory = medicalHistory;
-
-//     const updatedPatient = await Patient.findByIdAndUpdate(id, updatedFields, { new: true });
-//     if (!updatedPatient) {
-//       return next(createError(404, 'Patient not found', false));
-//     }
-
-//     res.status(200).json({ message: 'Patient updated successfully', status:200, sucess:'true' });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 
 
 // Function to edit User details
@@ -339,22 +254,24 @@ const editPatient = async (req, res) => {
 
 
 // getting Patient by id
-const getPatient = async (req, res) => {
+const getAllPatientsByUserId = async (req, res) => {
   try {
-      const patientId = req.params.id;
+    const userId = req.params.id; // Extract userId from the request parameters
 
-      // Find the patient by ID and select specific fields (example: name, email, and other patient-specific fields)
-      const patient = await Patient.findById(patientId).select('name email age');
+    // Find all patients with the given userId
+    const patients = await Patient.find({ userId });
 
-      if (!patient) {
-          return res.status(404).json({ message:'Patient not found', status:400, sucess:false});
-      }
+    if (!patients || patients.length === 0) {
+      return res.status(404).json({ message: 'No patients found for this userId', status: 404, success: false });
+    }
 
-      res.status(200).json(patient);
+    // Send all patients' data as a response
+    res.status(200).json({ data: patients, status: 200, success: true });
   } catch (error) {
-      res.status(500).json({ message: error.message, status: 500, sucess: false});
+    res.status(500).json({ message: error.message, status: 500, success: false });
   }
 };
+
 
 
 // Delete Patient
@@ -447,7 +364,7 @@ const resetPasswordPatient = async (req, res) => {
 
 module.exports = {
   registerPatient,
-  getPatient,
+  getAllPatientsByUserId,
   getAllPatients,
   updatePatient,
   editPatient,

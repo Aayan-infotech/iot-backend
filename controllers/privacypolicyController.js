@@ -32,7 +32,7 @@ exports.createprivacypolicy = async (req, res) => {
   const image2 = req.files && req.files.image2 ? req.files.image2[0].filename : null;
 
   // Use the correct model for creating the entry
-  const newprivacypolicy = new privacypolicy({
+  const newprivacypolicy = new Privacypolicy({
     title,
     image1,
     image2,

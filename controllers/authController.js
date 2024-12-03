@@ -119,41 +119,64 @@ const registerAdmin = async (req, res, next) => {
 
 
 // admin Login
-const loginAdmin = async (req, res, next) => {
+const loginAdmin = (req, res, next) => {
   try {
-    let admin = await Admin.findOne({ email: req.body.email, isAdmin: true });
-    if (!admin) {
-      console.log("Admin not found with email:", req.body.email);
-      return next(createError(404, "Admin Not Found", false));
+    // Static credentials
+    const staticEmail = "admin@uroflow.com";
+    const staticPassword = "admin012";
+
+    // Check email
+    if (req.body.email !== staticEmail) {
+      return res.status(404).json({
+        status: 404,
+        success: false,
+        message: "Invalid email or password",
+      });
     }
 
-    const isPasswordCorrect = await bcrypt.compare(req.body.password, admin.password);
-    if (!isPasswordCorrect) {
-      console.log("Incorrect password for admin with email:", req.body.email);
-      return next(createError(404, "Password is Incorrect", false));
+    // Check password
+    if (req.body.password !== staticPassword) {
+      return res.status(404).json({
+        status: 404,
+        success: false,
+        message: "Invalid email or password",
+      });
     }
 
+    // Generate static token
     const token = jwt.sign(
-      { id: admin._id, isAdmin: admin.isAdmin, roles: admin.roles },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
+      { id: "staticAdminId", isAdmin: true, roles: ["admin"] },
+      process.env.JWT_SECRET || "defaultSecretKey",
+      { expiresIn: "1h" }
     );
 
-    res.cookie("access_token", token, { httpOnly: true })
+    // Set token in HTTP-only cookie
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // Secure cookie in production
+        sameSite: "strict",
+      })
       .status(200)
       .json({
         token,
         status: 200,
-        sucess: "false",
-        message: "Login Success",
-        data: admin
+        success: true,
+        message: "Login successful",
+        data: {
+          email: staticEmail,
+          roles: ["admin"],
+        },
       });
-
   } catch (error) {
     console.error("Error during admin login:", error);
-    return next(createError(500, "Something went wrong"));
+    res.status(500).json({
+      status: 500,
+      success: false,
+      message: "Something went wrong",
+    });
   }
-}
+};
 
 
 //sendresetmail

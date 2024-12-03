@@ -28,7 +28,7 @@ const PatientSchema = mongoose.Schema(
         measureData: {
             type: Schema.Types.ObjectId,
             ref: 'MeasureData'
-        }
+        },
     },
     {
         timestamps: true

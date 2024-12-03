@@ -32,7 +32,6 @@ router.post('/reset-password/:token', resetPasswordUser);
 router.post('/logout', logoutMethod);
 router.post('/contactUs', contactUs );
 router.post('/deactivateAccount', deactivateAccount);
-
 router.put('/edit-profile/:id', verifyToken, editProfile);
 
 

@@ -3,7 +3,7 @@ const patient = require('../models/patientModel');
 
 const { 
     getAllPatients,
-    getPatient,
+    getAllPatientsByUserId,
     deletePatient,
     updatePatient,
     editPatient,
@@ -24,13 +24,11 @@ const router = express.Router();
 
 router.get('/getPatients/:userId', getPatients);
 router.get('/getPatientDetail/:id', getPatientDetail);
-
-
 router.post('/useraddingPatient', useraddingPatient);
 router.post('/registerPatient', registerPatient);
 router.get('/:id', 
     // verifyPatient, 
-    getPatient);
+    getAllPatientsByUserId);
 router.get('/', verifyAdmin, getAllPatients);
 router.put('/:id', verifyAdmin, updatePatient);
 router.delete('/:id', verifyAdmin, deletePatient);
