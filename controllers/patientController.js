@@ -363,7 +363,6 @@ const resetPasswordPatient = async (req, res) => {
 
 
 module.exports = {
-  registerPatient,
   getAllPatientsByUserId,
   getAllPatients,
   updatePatient,
